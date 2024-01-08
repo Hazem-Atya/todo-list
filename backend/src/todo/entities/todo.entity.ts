@@ -1,5 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { TimeStampEntity } from '../../generics/db/timestamp.entity';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 export enum TodoStatusEnum {
   'todo' = 'To Do',
@@ -7,7 +12,7 @@ export enum TodoStatusEnum {
   'completed' = 'Completed',
 }
 @Entity('todo')
-export class TodoEntity extends TimeStampEntity {
+export class TodoEntity {
   @PrimaryGeneratedColumn()
   id: number;
   @Column({
@@ -22,4 +27,14 @@ export class TodoEntity extends TimeStampEntity {
     default: TodoStatusEnum.todo,
   })
   status: TodoStatusEnum;
+  @CreateDateColumn({
+    type: Date,
+    name: 'created_at',
+  })
+  createdAt: Date;
+  @UpdateDateColumn({
+    type: Date,
+    name: 'updated_at',
+  })
+  updatedAt: Date;
 }
