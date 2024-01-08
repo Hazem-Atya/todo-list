@@ -1,0 +1,20 @@
+<li
+  class="bg-white shadow-md rounded-lg flex items-center justify-between py-2 px-4 mb-2"
+>
+  <div class="flex items-center">
+    <input
+      id="todo{{i}}"
+      type="checkbox"
+      class="mr-4"
+      [checked]="todo.completed"
+      (click)="onComplete(todo.id)"
+    />
+    <label
+      class="text-gray-800"
+      [ngClass]='{"line-through":todo.completed}'
+      for="todo{{i}}"
+      >{{todo.title}}</label
+    >
+  </div>
+  <button (click)="onDelete(todo.id)" class="text-red-500 font-semibold">Delete</button>
+</li>
