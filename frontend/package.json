@@ -18,6 +18,7 @@
     "@angular/platform-browser": "^16.1.0",
     "@angular/platform-browser-dynamic": "^16.1.0",
     "@angular/router": "^16.1.0",
+    "ngx-toastr": "^17.0.2",
     "rxjs": "~7.8.0",
     "socket.io-client": "^4.7.3",
     "tslib": "^2.3.0",

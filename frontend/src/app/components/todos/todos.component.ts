@@ -3,6 +3,7 @@ import { Todo, TodoStatusEnum } from '../models/todo.model';
 import { TodoService } from '../services/todo.service';
 import { TodosocketService } from 'src/app/websocket/todosocket.service';
 import { AddTodoDto } from '../dto/addTodo.dto';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -18,7 +19,9 @@ export class TodosComponent implements OnInit {
 
   constructor(
     private todoService: TodoService,
-    private todosocketService: TodosocketService
+    private todosocketService: TodosocketService,
+    private toastr: ToastrService
+
   ) {
     this.socket = this.todosocketService.getSocket();
     this.todos = [];
@@ -54,6 +57,7 @@ export class TodosComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.todoService.getAllTodos().subscribe({
       next: (todos: Todo[]) => {
         this.todos = todos;
@@ -101,7 +105,17 @@ export class TodosComponent implements OnInit {
 
   addTodo(todo: AddTodoDto) {
     this.todoService.addTodo(todo).subscribe({
+      next:(data)=>{
+        this.toastr.success("Todo added successfully!")
+      },
       error: (err) => {
+        if (Array.isArray(err?.error?.message)) {
+          err.error.message.forEach((msg: string) => {
+            this.toastr.error(msg)
+          });
+        } else {
+          this.toastr.error(err);
+        }
         console.log(err);
       },
     });
