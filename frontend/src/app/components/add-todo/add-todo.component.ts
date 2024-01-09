@@ -1,5 +1,6 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { Todo, TodoStatusEnum } from '../models/todo.model';
+import { AddTodoDto } from '../dto/addTodo.dto';
 @Component({
   selector: 'app-add-todo',
   templateUrl: './add-todo.component.html',
@@ -7,16 +8,13 @@ import { Todo, TodoStatusEnum } from '../models/todo.model';
 })
 export class AddTodoComponent {
   title: string = '';
-  @Output() todoAdd: EventEmitter<Todo> = new EventEmitter();
+  description: string = '';
+  @Output() todoAdd: EventEmitter<AddTodoDto> = new EventEmitter();
   onSubmit() {
     // alert(this.title);
     const todo = {
-      id: Math.floor(Math.random() * 1001) + 1,
       title: this.title,
-      description: this.title,
-      status: TodoStatusEnum.pending,
-      created_at: new Date(),
-      updated_at: new Date(),
+      description: this.description,
     };
     this.todoAdd.emit(todo);
     this.title = '';

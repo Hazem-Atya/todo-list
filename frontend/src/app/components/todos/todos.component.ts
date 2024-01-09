@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Todo, TodoStatusEnum } from '../models/todo.model';
 import { TodoService } from '../services/todo.service';
+import { TodosocketService } from 'src/app/websocket/todosocket.service';
+import { AddTodoDto } from '../dto/addTodo.dto';
+
 
 @Component({
   selector: 'app-todos',
@@ -9,9 +12,36 @@ import { TodoService } from '../services/todo.service';
 })
 export class TodosComponent implements OnInit {
   todos: Todo[];
+  socket: any;
+  totalPending: number = 0;
+  totalCompleted: number = 0;
 
-  constructor(private todoService: TodoService) {
+  constructor(
+    private todoService: TodoService,
+    private todosocketService: TodosocketService
+  ) {
+    this.socket = this.todosocketService.getSocket();
     this.todos = [];
+
+    this.socket.on('ADD_TODO', (data: any) => {
+      this.todos.push(data);
+      this.totalPending++;
+    });
+
+    this.socket.on('DELETE_TODO', (data: any) => {
+      const todoToDeleteIndex = this.todos.findIndex((t) => t.id === data);
+      if (this.todos[todoToDeleteIndex].status === TodoStatusEnum.completed) {
+        this.totalCompleted--;
+      } else {
+        this.totalPending--;
+      }
+      this.todos = this.todos.filter((todo) => todo.id !== data);
+    });
+
+    this.socket.on('UPDATE_TODO', (data: any) => {
+      const index = this.todos.findIndex((todo) => todo.id === data.id);
+      this.todos[index] = data;
+    });
   }
 
   ngOnInit() {
@@ -19,6 +49,12 @@ export class TodosComponent implements OnInit {
       next: (todos: Todo[]) => {
         console.log(todos);
         this.todos = todos;
+        this.totalCompleted = todos.filter(
+          (t) => t.status === TodoStatusEnum.completed
+        ).length;
+        this.totalPending = todos.filter(
+          (t) => t.status === TodoStatusEnum.pending
+        ).length;
       },
       error: (err) => {
         console.log(err);
@@ -29,30 +65,30 @@ export class TodosComponent implements OnInit {
   toggleTodo(id: number) {
     const todo = this.todos.find((t) => t.id === id);
     if (todo) {
-      if (todo.status == TodoStatusEnum.pending)
-        todo.status = TodoStatusEnum.completed;
-      else todo.status = TodoStatusEnum.pending;
+      if (todo) {
+        if (todo.status == TodoStatusEnum.pending) {
+          todo.status = TodoStatusEnum.completed;
+          this.totalCompleted++;
+          this.totalPending--;
+        } else {
+          todo.status = TodoStatusEnum.pending;
+          this.totalCompleted--;
+          this.totalPending++;
+        }
+      }
     }
   }
 
   deleteTodo(id: number) {
     this.todoService.deleteById(id).subscribe({
-      next: (todo) => {
-        console.log(todo);
-        this.todos = this.todos.filter((t) => t.id !== id);
-      },
       error: (err) => {
         console.log(err);
       },
     });
   }
 
-  addTodo(todo: Todo) {
-    this.todos.push(todo);
+  addTodo(todo: AddTodoDto) {
     this.todoService.addTodo(todo).subscribe({
-      next: (todo) => {
-        console.log(todo);
-      },
       error: (err) => {
         console.log(err);
       },

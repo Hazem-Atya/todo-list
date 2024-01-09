@@ -13,8 +13,9 @@
       class="text-gray-800"
       [ngClass]="{ 'line-through': todo.status == 'Completed' }"
       for="todo{{ i }}"
-      >{{ todo.title }}</label
+      >{{ todo.title }} ({{todo.description}})</label
     >
+    
   </div>
   <button (click)="onDelete(todo.id)" class="text-red-500 font-semibold">
     Delete

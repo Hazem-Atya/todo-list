@@ -1,14 +1,21 @@
+<h1 class="text-4xl text-center text-gray-800 mb-8">Awesome Todo List</h1>
+
 <app-add-todo (todoAdd)="addTodo($event)"></app-add-todo>
+
+
+<div style="display: flex; margin-top: 5vh; gap: 5%;">
+  <span><strong>Total:</strong> {{ todos.length }}</span>
+  <span><strong style="color: orange">Pending:</strong> {{ totalPending }}</span>
+  <span><strong style="color: green">Completed:</strong> {{ totalCompleted }}</span>
+</div>
+
+
 <ul id="task-list" class="mt-8">
   <div *ngIf="this.todos.length === 0; else elseBlock">No Todos to display</div>
   <ng-template #elseBlock>
     <div *ngFor="let todo of todos; index as i">
-      <app-todo-item
-        [todo]="todo"
-        [i]="i"
-        (todoCheckbox)="toggleTodo($event)"
-        (todoDelete)="deleteTodo($event)"
-      ></app-todo-item>
+      <app-todo-item [todo]="todo" [i]="i" (todoCheckbox)="toggleTodo($event)"
+        (todoDelete)="deleteTodo($event)"></app-todo-item>
     </div>
   </ng-template>
 </ul>
