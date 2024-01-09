@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+
+  postgresdb:
+    container_name: "postgresdb"
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+    restart: unless-stopped
+
+    depends_on:
+       - postgresdb
+    environment:
+      DB_USERNAME: postgres 
+      DB_PASSWORD: postgres
+      DB_HOST: "postgresdb"
+      DB_PORT: "5432"
+      DB_NAME: postgres
+
+    ports:
+      - "3000:3000"
+
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+    restart: unless-stopped
+    depends_on:
+       - backend
+
+    ports:
+      - "4200:4200"
+
+
+
+volumes:
+  db:
+    driver: local
