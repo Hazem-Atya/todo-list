@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   Column,
   CreateDateColumn,
@@ -12,25 +13,38 @@ export enum TodoStatusEnum {
 }
 @Entity('todo')
 export class TodoEntity {
+  @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
+
+  @ApiProperty()
   @Column({
     length: 50,
   })
+
+  @ApiProperty()
   title: string;
+
+  @ApiProperty()
   @Column()
   description: string;
+  
+  @ApiProperty()
   @Column({
     type: 'enum',
     enum: TodoStatusEnum,
     default: TodoStatusEnum.pending,
   })
   status: TodoStatusEnum;
+  
+  @ApiProperty()
   @CreateDateColumn({
     type: Date,
     name: 'created_at',
   })
   createdAt: Date;
+
+  @ApiProperty()
   @UpdateDateColumn({
     type: Date,
     name: 'updated_at',
