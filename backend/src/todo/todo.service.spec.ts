@@ -48,7 +48,7 @@ describe('TodoService', () => {
         ...addTodoDto,
         createdAt: new Date(),
         updatedAt: new Date(),
-        status: TodoStatusEnum.todo,
+        status: TodoStatusEnum.pending,
       };
 
       jest.spyOn(todoRepository, 'save').mockResolvedValue(savedTodo);
@@ -71,7 +71,7 @@ describe('TodoService', () => {
         id: 1,
         title: 'Test Todo',
         description: 'Test Description',
-        status: TodoStatusEnum.todo,
+        status: TodoStatusEnum.pending,
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -94,7 +94,7 @@ describe('TodoService', () => {
         id: 1,
         title: 'Test Todo',
         description: 'Test Description',
-        status: TodoStatusEnum.todo,
+        status: TodoStatusEnum.pending,
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -129,7 +129,7 @@ describe('TodoService', () => {
         id: 1,
         title: 'Test Todo',
         description: 'Test Description',
-        status: TodoStatusEnum.todo,
+        status: TodoStatusEnum.pending,
         createdAt: new Date(),
         updatedAt: new Date(),
       };

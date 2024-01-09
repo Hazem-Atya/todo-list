@@ -7,8 +7,7 @@ import {
 } from 'typeorm';
 
 export enum TodoStatusEnum {
-  'todo' = 'To Do',
-  'in_progress' = 'In Progress',
+  'pending' = 'Pending',
   'completed' = 'Completed',
 }
 @Entity('todo')
@@ -24,7 +23,7 @@ export class TodoEntity {
   @Column({
     type: 'enum',
     enum: TodoStatusEnum,
-    default: TodoStatusEnum.todo,
+    default: TodoStatusEnum.pending,
   })
   status: TodoStatusEnum;
   @CreateDateColumn({

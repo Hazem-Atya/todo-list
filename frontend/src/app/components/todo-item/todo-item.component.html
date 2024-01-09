@@ -3,18 +3,20 @@
 >
   <div class="flex items-center">
     <input
-      id="todo{{i}}"
+      id="todo{{ i }}"
       type="checkbox"
       class="mr-4"
-      [checked]="todo.completed"
+      [checked]="todo.status == 'Completed'"
       (click)="onComplete(todo.id)"
     />
     <label
       class="text-gray-800"
-      [ngClass]='{"line-through":todo.completed}'
-      for="todo{{i}}"
-      >{{todo.title}}</label
+      [ngClass]="{ 'line-through': todo.status == 'Completed' }"
+      for="todo{{ i }}"
+      >{{ todo.title }}</label
     >
   </div>
-  <button (click)="onDelete(todo.id)" class="text-red-500 font-semibold">Delete</button>
+  <button (click)="onDelete(todo.id)" class="text-red-500 font-semibold">
+    Delete
+  </button>
 </li>
