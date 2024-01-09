@@ -40,6 +40,15 @@ export class TodosComponent implements OnInit {
 
     this.socket.on('UPDATE_TODO', (data: any) => {
       const index = this.todos.findIndex((todo) => todo.id === data.id);
+      if (this.todos[index].status != data.status) {
+        if (data.status == TodoStatusEnum.pending) {
+          this.totalPending++;
+          this.totalCompleted--;
+        } else {
+          this.totalPending--;
+          this.totalCompleted++;
+        }
+      }
       this.todos[index] = data;
     });
   }
@@ -47,7 +56,6 @@ export class TodosComponent implements OnInit {
   ngOnInit() {
     this.todoService.getAllTodos().subscribe({
       next: (todos: Todo[]) => {
-        console.log(todos);
         this.todos = todos;
         this.totalCompleted = todos.filter(
           (t) => t.status === TodoStatusEnum.completed
@@ -67,13 +75,17 @@ export class TodosComponent implements OnInit {
     if (todo) {
       if (todo) {
         if (todo.status == TodoStatusEnum.pending) {
-          todo.status = TodoStatusEnum.completed;
-          this.totalCompleted++;
-          this.totalPending--;
+          this.todoService.updateTodo(id, { status: TodoStatusEnum.completed }).subscribe({
+            error: (err) => {
+              console.log(err);
+            },
+          });
         } else {
-          todo.status = TodoStatusEnum.pending;
-          this.totalCompleted--;
-          this.totalPending++;
+          this.todoService.updateTodo(id, { status: TodoStatusEnum.pending }).subscribe({
+            error: (err) => {
+              console.log(err);
+            },
+          });
         }
       }
     }
