@@ -11,7 +11,6 @@ export class AddTodoComponent {
   description: string = '';
   @Output() todoAdd: EventEmitter<AddTodoDto> = new EventEmitter();
   onSubmit() {
-    // alert(this.title);
     const todo = {
       title: this.title,
       description: this.description,

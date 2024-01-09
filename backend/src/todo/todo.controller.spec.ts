@@ -19,7 +19,6 @@ describe('TodoController', () => {
 
       it('should return an array of todos', async () => {
         const data = await controller.getAllTodos();
-        console.log(data);
         expect(await controller.getAllTodos()).toEqual([]);
       });
     });
